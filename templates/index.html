@@ -1,0 +1,56 @@
+<!-- templates/index.html -->
+{% extends 'base.html' %}
+
+{% block title %}
+<title>TaskMaster</title>
+{% endblock %}
+
+{% block body %}
+<div class="Task">
+    <h1>Ayush's TaskMaster</h1>
+
+    {% if tasks|length == 0 %}
+        <h4>No tasks yet, Create one!!</h4>
+    {% else %}
+    <table>
+        <thead>
+            <tr>
+                <th>Task Name</th>
+                <th>Added</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for task in tasks %}
+            <tr>
+                <td data-label="Task Name">{{ task.content }}</td>
+                <td data-label="Added">{{ task.date_created.date() }}</td>
+                <td data-label="Actions">
+                    <div class="action-buttons">
+                        <a href="/delete/{{ task.id }}" class="btn btn-delete">Delete</a>
+                        <a href="/update/{{ task.id }}" class="btn btn-update">Update</a>
+                    </div>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+
+    <form action="/" method="post" onsubmit="return validateForm()">
+        <input type="text" name="content" id="content" placeholder="Enter a new task">
+        <input type="submit" value="Add Task">
+    </form>
+</div>
+
+<script>
+function validateForm() {
+    const content = document.getElementById('content').value.trim();
+    if (!content) {
+        alert("Task content cannot be empty.");
+        return false;
+    }
+    return true;
+}
+</script>
+{% endblock %}
